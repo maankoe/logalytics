@@ -24,4 +24,3 @@ class TestParsing(unittest.TestCase):
         parsers = {TIMESTAMP: lambda x: datetime.strptime(x, date_format)}
         entry = parse_groups({TIMESTAMP: str(timestamp), MESSAGE: message, MODULE: module}, parsers)
         self.assertEqual(entry, {TIMESTAMP: timestamp, MESSAGE: message, MODULE: module})
-
