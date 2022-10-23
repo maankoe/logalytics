@@ -1,13 +1,18 @@
-class Entry():
+TIMESTAMP = "timestamp"
+
+
+class Entry:
     def __init__(
             self,
-            *,
-            timestamp,
             **kwargs
     ):
-        self._timestamp = timestamp
         self._entry = kwargs
+        if TIMESTAMP not in self._entry:
+            raise ValueError(f"{TIMESTAMP} required for creation of Entity")
 
     @property
     def timestamp(self):
-        return self._timestamp
+        return self[TIMESTAMP]
+
+    def __getitem__(self, item):
+        return self._entry[item]
