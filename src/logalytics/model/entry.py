@@ -1,11 +1,9 @@
-TIMESTAMP = "timestamp"
+from logalytics.model.entry_schema import TIMESTAMP
 
 
 class Entry:
-    def __init__(
-            self,
-            **kwargs
-    ):
+    # it's important to keep the number of reserved names (i.e., TIMESTAMP) small
+    def __init__(self, **kwargs):
         self._entry = kwargs
         if TIMESTAMP not in self._entry:
             raise ValueError(f"{TIMESTAMP} required for creation of Entity")
@@ -16,3 +14,6 @@ class Entry:
 
     def __getitem__(self, item):
         return self._entry[item]
+
+    def canonical(self, schema):
+        return schema.canonical(self)

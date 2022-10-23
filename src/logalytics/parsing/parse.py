@@ -1,7 +1,8 @@
 import re
 
 TIMESTAMP = "timestamp"
-MODULE = "model"
+MODULE = "module"
+METHOD = "method"
 MESSAGE = "message"
 
 
