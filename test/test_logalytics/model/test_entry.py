@@ -14,5 +14,5 @@ class TestEntry(unittest.TestCase):
 
     def test_entry_requires_timestamp(self):
         module = "module"
-        with (self.assertRaisesRegex(ValueError, f"{TIMESTAMP} required")):
+        with (self.assertRaisesRegex(TypeError, TIMESTAMP)):
             Entry(module=module)

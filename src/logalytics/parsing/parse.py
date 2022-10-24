@@ -3,6 +3,7 @@ import re
 TIMESTAMP = "timestamp"
 MODULE = "module"
 METHOD = "method"
+THREAD = "thread"
 MESSAGE = "message"
 
 
