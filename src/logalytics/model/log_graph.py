@@ -5,16 +5,19 @@ TIMEDIFFS = "timediffs"
 
 
 class LogGraph:
-    def __init__(self, entity_schema):
-        self._entity_schema = entity_schema
+    def __init__(self, entry_schema, entry_summarizer=None):
+        self._entry_schema = entry_schema
+        self._entry_summary = lambda x: x if entry_summarizer is None else entry_summarizer
+        # self._identify_edges = lambda
         self._graph = nx.DiGraph()
 
     def add_entry(self, entry):
         canonical = self._node_id(entry)
+        entry_summary = self._entry_summary(entry)
         if entry not in self:
-            self._graph.add_node(canonical, **{HITS: [entry]})
+            self._graph.add_node(canonical, **{HITS: [entry_summary]})
         else:
-            self.hits(entry).append(entry)
+            self.hits(entry).append(entry_summary)
         for candidate, candidate_node in self._graph.nodes.items():
             if candidate == canonical:
                 continue
@@ -55,4 +58,4 @@ class LogGraph:
         return len(self._graph)
 
     def _node_id(self, entry):
-        return "-".join(entry.canonical(self._entity_schema))
+        return "-".join(entry.canonical(self._entry_schema))
