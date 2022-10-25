@@ -1,4 +1,4 @@
-from typing import List, Any
+from typing import List, Any, Tuple
 
 from logalytics.model.entry import Entry
 from logalytics.model.types import GroupName, EntryItem
@@ -9,15 +9,15 @@ class EntrySchema:
                  canonical: List[GroupName],
                  variable: List[GroupName],
                  thread: List[GroupName]):
-        self._canonical = list(sorted(canonical))
-        self._variable = list(sorted(variable))
-        self._thread = list(sorted(thread))
+        self._canonical = tuple(sorted(canonical))
+        self._variable = tuple(sorted(variable))
+        self._thread = tuple(sorted(thread))
 
-    def canonical(self, entry: Entry) -> List[EntryItem]:
-        return [entry[x] for x in self._canonical]
+    def canonical(self, entry: Entry) -> Tuple[EntryItem]:
+        return tuple(entry[x] for x in self._canonical)
 
-    def variable(self, entry: Entry) -> List[EntryItem]:
-        return [entry[x] for x in self._variable]
+    def variable(self, entry: Entry) -> Tuple[EntryItem]:
+        return tuple(entry[x] for x in self._variable)
 
-    def thread(self, entry: Entry) -> List[EntryItem]:
-        return [entry[x] for x in self._thread]
+    def thread(self, entry: Entry) -> Tuple[EntryItem]:
+        return tuple(entry[x] for x in self._thread)

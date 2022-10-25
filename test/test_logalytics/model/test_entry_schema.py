@@ -14,5 +14,5 @@ class TestEntry(unittest.TestCase):
         thread = "thread"
         entry = Entry(**{TIMESTAMP: timestamp, MODULE: module, METHOD: method, THREAD: thread})
         schema = EntrySchema(canonical=[MODULE, METHOD], variable=[TIMESTAMP], thread=[THREAD])
-        self.assertEqual(schema.canonical(entry), [entry[METHOD], entry[MODULE]])
-        self.assertEqual(schema.thread(entry), [entry[THREAD]])
+        self.assertEqual(schema.canonical(entry), (entry[METHOD], entry[MODULE],))
+        self.assertEqual(schema.thread(entry), (entry[THREAD],))
