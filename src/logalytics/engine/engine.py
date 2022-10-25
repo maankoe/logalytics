@@ -1,10 +1,10 @@
+from typing import Iterable
+from pathlib import Path
+
 from logalytics.model.entry import Entry
-from logalytics.parsing.parse import parse_entry, parse_groups
+from logalytics.model.schema.log_schema import LogSchema
 
 
-def load_log(file, log_format, groups, parsers=None):
-    if parsers is None:
-        parsers = {}
+def load_log(file: Path, log_format: LogSchema) -> Iterable[Entry]:
     with open(file) as logF:
-        entries = [parse_entry(line, log_format, groups) for line in logF]
-        return {Entry(**parse_groups(e, parsers)) for e in entries}
+        return [Entry.from_log(line, log_format) for line in logF]

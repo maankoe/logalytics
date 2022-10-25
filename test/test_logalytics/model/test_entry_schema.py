@@ -2,7 +2,7 @@ import unittest
 from datetime import datetime
 
 from logalytics.model.entry import Entry
-from logalytics.model.entry_schema import EntrySchema
+from logalytics.model.schema.entry_schema import EntrySchema
 from logalytics.parsing.parse import TIMESTAMP, MODULE, METHOD, THREAD
 
 

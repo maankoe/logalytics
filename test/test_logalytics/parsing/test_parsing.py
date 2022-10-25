@@ -2,7 +2,7 @@ import unittest
 
 from datetime import datetime
 
-from logalytics.parsing.parse import parse_entry, parse_groups, TIMESTAMP, MESSAGE, MODULE
+from logalytics.parsing.parse import parse_line, parse_groups, TIMESTAMP, MESSAGE, MODULE
 
 
 class TestParsing(unittest.TestCase):
@@ -13,10 +13,10 @@ class TestParsing(unittest.TestCase):
         line = "{timestamp}/{module}/{message}".format(timestamp=timestamp, module=module, message=message)
         log_format = "(.*)/(.*)/(.*)"
         log_groups = [TIMESTAMP, MODULE, MESSAGE]
-        entry = parse_entry(line, log_format, log_groups)
+        entry = parse_line(line, log_format, log_groups)
         self.assertEqual(entry, {TIMESTAMP: str(timestamp), MESSAGE: message, MODULE: module})
 
-    def test_parse_entry_items(self):
+    def test_parse_line_items(self):
         timestamp = datetime(2022, 10, 20, 21, 16, 54, 524000)
         module = "model"
         message = "Testing: 521295"

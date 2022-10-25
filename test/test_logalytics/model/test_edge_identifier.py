@@ -1,10 +1,11 @@
 import unittest
 from datetime import datetime
 
-from logalytics.model.edge_identifier import EdgeStrategy, FullyConnected
+from logalytics.model.edge_identifier import FullyConnected
 from logalytics.model.entry import Entry
-from logalytics.model.entry_schema import TIMESTAMP, MODULE, THREAD, EntrySchema
+from logalytics.model.schema.entry_schema import EntrySchema
 from logalytics.model.log_graph import LogGraph
+from logalytics.model.schema.constants import MODULE, THREAD, TIMESTAMP
 
 
 class TestEdgeIdentifier(unittest.TestCase):

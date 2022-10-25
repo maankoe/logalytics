@@ -3,7 +3,8 @@ from pathlib import Path
 from datetime import datetime
 
 from logalytics.model.entry import Entry
-from logalytics.model.entry_schema import EntrySchema, MODULE, METHOD, THREAD, TIMESTAMP
+from logalytics.model.schema.entry_schema import EntrySchema
+from logalytics.model.schema.constants import MODULE, METHOD, THREAD, TIMESTAMP
 from logalytics.model.log_graph import LogGraph
 
 log_file = Path(__file__).parent.parent.parent.parent / "sim" / "data" / "primes.log"
