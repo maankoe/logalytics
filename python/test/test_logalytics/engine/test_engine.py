@@ -7,7 +7,7 @@ from logalytics.model.entry import Entry
 from logalytics.parsing.parse import TIMESTAMP, MODULE, MESSAGE
 from logalytics.model.schema.log_schema import LogSchema
 
-log_file = Path(__file__).parent.parent.parent.parent / "sim" / "data" / "primes.log"
+log_file = Path(__file__).parent.parent.parent.parent.parent / "sim" / "data" / "primes.log"
 
 
 class TestEntry(unittest.TestCase):
