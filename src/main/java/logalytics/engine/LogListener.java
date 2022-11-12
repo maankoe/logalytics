@@ -15,14 +15,14 @@ public class LogListener {
 
     @Autowired
     public LogListener(LogListenerConfig config) throws IOException {
-        this.readers = new ArrayList<>();
-        for (String file : config.getFiles()) {
-            readers.add(new LogReader(
-                    new BufferedReader(new FileReader(file))
-            ));
-        }
-        for (LogReader reader : readers) {
-            System.out.println(reader.readEntry().raw());
-        }
+//        this.readers = new ArrayList<>();
+//        for (String file : config.getFiles()) {
+//            readers.add(new LogReader(
+//                    new BufferedReader(new FileReader(file))
+//            ));
+//        }
+//        for (LogReader reader : readers) {
+//            System.out.println(reader.readEntry().raw());
+//        }
     }
 }

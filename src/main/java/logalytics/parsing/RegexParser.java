@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 
 
-public class RegexParser implements Parser {
+public class RegexParser implements LogParser {
     private final RegexSchema schema;
 
     public RegexParser(RegexSchema schema) {

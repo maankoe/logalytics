@@ -17,7 +17,7 @@ public class TestRegexParser {
         RegexSchema schema = new RegexSchema(
                 "(.*)/(.*)", Lists.newArrayList(TIMESTAMP, MESSAGE)
         );
-        Parser parser = new RegexParser(schema);
+        LogParser parser = new RegexParser(schema);
         Entry entry = parser.parse(logLine);
         assertThat(entry.raw()).isEqualTo(logLine);
         assertThat(entry.get(TIMESTAMP)).isEqualTo(timestampString);

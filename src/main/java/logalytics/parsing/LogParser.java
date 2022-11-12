@@ -2,6 +2,6 @@ package logalytics.parsing;
 
 import logalytics.model.Entry;
 
-public interface Parser {
+public interface LogParser {
     Entry parse(String line);
 }
