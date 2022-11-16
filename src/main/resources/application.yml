@@ -1,3 +1,1 @@
-log-listener:
-  files:
-    - './sim/data/primes.log'
+log-watcher-config-path: './log-watcher-conf.json'

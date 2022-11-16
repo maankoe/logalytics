@@ -1,0 +1,5 @@
+[{
+  "file-name": "./sim/data/primes.log",
+  "regex": "asdf",
+  "groups": ["qwer"]
+}]

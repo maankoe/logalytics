@@ -1,12 +1,11 @@
 package logalytics.engine;
 
+import logalytics.config.ConfigParseException;
+import logalytics.config.UserConfigs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -14,11 +13,14 @@ public class LogListener {
     List<LogReader> readers;
 
     @Autowired
-    public LogListener(LogListenerConfig config) throws IOException {
+    public LogListener(UserConfigs listenerConfig) throws IOException, ConfigParseException {
+        System.out.println(listenerConfig.logWatcherConfig());
 //        this.readers = new ArrayList<>();
-//        for (String file : config.getFiles()) {
+//        for (LogConfig logConfig : listenerConfig.getLogConfigs()) {
+//            RegexSchema schema = new RegexSchema(logConfig.getRegex(), logConfig.getGroups());
 //            readers.add(new LogReader(
-//                    new BufferedReader(new FileReader(file))
+//                    new BufferedReader(new FileReader(logConfig.getFileName())),
+//                    new RegexParser(schema)
 //            ));
 //        }
 //        for (LogReader reader : readers) {
