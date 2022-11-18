@@ -1,8 +1,9 @@
 package logalytics.config;
 
 import logalytics.config.parsing.ConfigParseException;
-import logalytics.config.parsing.LogSchemaParser;
+import logalytics.config.parsing.LogSchemaConfigParser;
 import logalytics.config.parsing.LogWatcherConfigLoader;
+import logalytics.parsing.LogSchema;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -21,6 +22,8 @@ public class UserConfigs {
     }
 
     public LogWatcherConfig logWatcherConfig() throws IOException, ConfigParseException {
-        return new LogWatcherConfigLoader(new LogSchemaParser()).load(new FileInputStream(this.logWatcherConfigPath));
+        return new LogWatcherConfigLoader(
+                new LogSchemaConfigParser()
+        ).load(new FileInputStream(this.logWatcherConfigPath));
     }
 }

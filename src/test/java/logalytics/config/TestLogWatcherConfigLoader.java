@@ -2,7 +2,7 @@ package logalytics.config;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import logalytics.config.parsing.ConfigParseException;
-import logalytics.config.parsing.LogSchemaParser;
+import logalytics.config.parsing.LogSchemaConfigParser;
 import logalytics.config.parsing.LogWatcherConfigLoader;
 import org.junit.jupiter.api.Test;
 
@@ -18,9 +18,9 @@ import static org.mockito.Mockito.when;
 public class TestLogWatcherConfigLoader {
     @Test
     public void testLoadWatcherConfigFromString() throws ConfigParseException {
-        LogSchemaParser schemaParser = mock(LogSchemaParser.class);
-        LogSchema schemaA = mock(LogSchema.class);
-        LogSchema schemaB = mock(LogSchema.class);
+        LogSchemaConfigParser schemaParser = mock(LogSchemaConfigParser.class);
+        LogSchemaBuilder schemaA = mock(LogSchemaBuilder.class);
+        LogSchemaBuilder schemaB = mock(LogSchemaBuilder.class);
         when(schemaParser.parse(any())).thenReturn(schemaA).thenReturn(schemaB);
         LogWatcherConfigLoader loader = new LogWatcherConfigLoader(schemaParser);
         LogWatcherConfig config = loader.load("[{}, {}]");
@@ -29,9 +29,9 @@ public class TestLogWatcherConfigLoader {
 
     @Test
     public void testLoadWatcherConfigFromFile() throws ConfigParseException, IOException {
-        LogSchemaParser schemaParser = mock(LogSchemaParser.class);
-        LogSchema schemaA = mock(LogSchema.class);
-        LogSchema schemaB = mock(LogSchema.class);
+        LogSchemaConfigParser schemaParser = mock(LogSchemaConfigParser.class);
+        LogSchemaBuilder schemaA = mock(LogSchemaBuilder.class);
+        LogSchemaBuilder schemaB = mock(LogSchemaBuilder.class);
         when(schemaParser.parse(any())).thenReturn(schemaA).thenReturn(schemaB);
         LogWatcherConfigLoader loader = new LogWatcherConfigLoader(schemaParser);
         InputStream configStream = configInputStream("[{}, {}]");
@@ -40,8 +40,8 @@ public class TestLogWatcherConfigLoader {
     }
 
     @Test
-    public void testLoadBadJson() throws ConfigParseException {
-        LogSchemaParser schemaParser = mock(LogSchemaParser.class);
+    public void testLoadBadJson() {
+        LogSchemaConfigParser schemaParser = mock(LogSchemaConfigParser.class);
         LogWatcherConfigLoader loader = new LogWatcherConfigLoader(schemaParser);
         Exception exception = catchException(() -> loader.load("[{]"));
         assertThat(exception).isInstanceOf(ConfigParseException.class);
@@ -50,6 +50,6 @@ public class TestLogWatcherConfigLoader {
     }
 
     private InputStream configInputStream(String configString) {
-        return new ByteArrayInputStream("[{}, {}]".getBytes(StandardCharsets.UTF_8));
+        return new ByteArrayInputStream(configString.getBytes(StandardCharsets.UTF_8));
     }
 }

@@ -4,13 +4,13 @@ import java.util.List;
 
 public class LogWatcherConfig {
 
-    private final List<LogSchema> schemas;
+    private final List<LogSchemaBuilder> schemas;
 
-    public LogWatcherConfig(List<LogSchema> schemas) {
+    public LogWatcherConfig(List<LogSchemaBuilder> schemas) {
         this.schemas = schemas;
     }
 
-    public List<LogSchema> schemas() {
+    public List<LogSchemaBuilder> schemas() {
         return this.schemas;
     }
 }

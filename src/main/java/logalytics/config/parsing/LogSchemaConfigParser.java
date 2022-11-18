@@ -1,22 +1,22 @@
 package logalytics.config.parsing;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import logalytics.config.LogSchema;
+import logalytics.config.LogSchemaBuilder;
+import logalytics.parsing.LogSchema;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LogSchemaParser implements JsonNodeParser<LogSchema> {
+public class LogSchemaConfigParser implements JsonNodeParser<LogSchemaBuilder> {
     public static final String FILE_PATH = "file-path";
     public static final String REGEX = "regex";
     public static final String GROUPS = "groups";
 
-    public LogSchema parse(JsonNode node) throws ConfigParseException {
-        return new LogSchema(
-                getValueNode(node, FILE_PATH).asText(),
-                getValueNode(node, REGEX).asText(),
-                getStringList(getValueNode(node, GROUPS))
-        );
+    public LogSchemaBuilder parse(JsonNode node) throws ConfigParseException {
+        return LogSchema.builder()
+                .withFilePath(getValueNode(node, FILE_PATH).asText())
+                .withRegex(getValueNode(node, REGEX).asText())
+                .withGroups(getStringList(getValueNode(node, GROUPS)));
     }
 
     private List<String> getStringList(JsonNode node) {
