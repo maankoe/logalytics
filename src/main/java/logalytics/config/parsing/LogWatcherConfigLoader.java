@@ -1,8 +1,10 @@
-package logalytics.config;
+package logalytics.config.parsing;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import logalytics.config.LogSchema;
+import logalytics.config.LogWatcherConfig;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +13,11 @@ import java.util.Iterator;
 import java.util.List;
 
 public class LogWatcherConfigLoader implements ConfigLoader<LogWatcherConfig> {
+    private final LogSchemaParser logSchemaParser;
+
+    public LogWatcherConfigLoader(LogSchemaParser logSchemaParser) {
+        this.logSchemaParser = logSchemaParser;
+    }
 
     public LogWatcherConfig load(File jsonFile) throws IOException, ConfigParseException {
         return this.fromJson(new ObjectMapper().readTree(jsonFile));
@@ -26,18 +33,10 @@ public class LogWatcherConfigLoader implements ConfigLoader<LogWatcherConfig> {
 
     private LogWatcherConfig fromJson(JsonNode root) throws ConfigParseException {
         Iterator<JsonNode> schemaNodeIterator = root.elements();
-        List<LogSchema> schemas = extractLogSchemas(schemaNodeIterator);
-        return new LogWatcherConfig(schemas);
-    }
-
-    private List<LogSchema> extractLogSchemas(Iterator<JsonNode> schemaNodeIterator) throws ConfigParseException {
         List<LogSchema> schemas = new ArrayList<>();
         while (schemaNodeIterator.hasNext()) {
-            JsonNode node = schemaNodeIterator.next();
-
+            schemas.add(this.logSchemaParser.parse(schemaNodeIterator.next()));
         }
-        return schemas;
+        return new LogWatcherConfig(schemas);
     }
-
-
 }

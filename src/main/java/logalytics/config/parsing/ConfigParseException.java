@@ -1,4 +1,4 @@
-package logalytics.config;
+package logalytics.config.parsing;
 
 public class ConfigParseException extends Exception {
     public ConfigParseException(Exception cause) {

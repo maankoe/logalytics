@@ -1,4 +1,4 @@
-package logalytics.config;
+package logalytics.config.parsing;
 
 import java.io.File;
 import java.io.IOException;

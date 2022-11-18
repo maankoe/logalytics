@@ -1,6 +1,6 @@
 package logalytics.engine;
 
-import logalytics.config.ConfigParseException;
+import logalytics.config.parsing.ConfigParseException;
 import logalytics.config.UserConfigs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

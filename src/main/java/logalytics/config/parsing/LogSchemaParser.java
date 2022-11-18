@@ -1,12 +1,12 @@
-package logalytics.config;
+package logalytics.config.parsing;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import logalytics.config.LogSchema;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public class LogSchemaConfigParser {
+public class LogSchemaParser implements JsonNodeParser<LogSchema> {
     public static final String FILE_PATH = "file-path";
     public static final String REGEX = "regex";
     public static final String GROUPS = "groups";
