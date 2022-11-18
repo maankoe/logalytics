@@ -1,10 +1,10 @@
 package logalytics.config.parsing;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 public interface ConfigLoader<T> {
-    T load(File jsonFile) throws IOException, ConfigParseException;
+    T load(InputStream inputStream) throws IOException, ConfigParseException;
 
     T load(String configString) throws ConfigParseException;
 }

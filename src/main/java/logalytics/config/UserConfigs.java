@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
-import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 @ConstructorBinding
@@ -21,6 +21,6 @@ public class UserConfigs {
     }
 
     public LogWatcherConfig logWatcherConfig() throws IOException, ConfigParseException {
-        return new LogWatcherConfigLoader(new LogSchemaParser()).load(new File(this.logWatcherConfigPath));
+        return new LogWatcherConfigLoader(new LogSchemaParser()).load(new FileInputStream(this.logWatcherConfigPath));
     }
 }

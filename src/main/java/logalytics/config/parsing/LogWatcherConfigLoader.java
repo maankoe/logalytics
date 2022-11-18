@@ -1,13 +1,14 @@
 package logalytics.config.parsing;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import logalytics.config.LogSchema;
 import logalytics.config.LogWatcherConfig;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -19,8 +20,8 @@ public class LogWatcherConfigLoader implements ConfigLoader<LogWatcherConfig> {
         this.logSchemaParser = logSchemaParser;
     }
 
-    public LogWatcherConfig load(File jsonFile) throws IOException, ConfigParseException {
-        return this.fromJson(new ObjectMapper().readTree(jsonFile));
+    public LogWatcherConfig load(InputStream inputStream) throws IOException, ConfigParseException {
+        return this.fromJson(new ObjectMapper().readTree(inputStream));
     }
 
     public LogWatcherConfig load(String jsonString) throws ConfigParseException {

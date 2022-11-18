@@ -1,4 +1,4 @@
-package logalytics;
+package logalytics.config;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -34,7 +34,8 @@ public class TestLogSchemaParser {
     public void testLogSchemaBadNodeException() {
         ArrayNode badNode = new ObjectMapper().createArrayNode();
         LogSchemaParser parser = new LogSchemaParser();
-        ConfigParseException exception = catchThrowableOfType(() -> parser.parse(badNode), ConfigParseException.class);
+        Exception exception = catchException(() -> parser.parse(badNode));
+        assertThat(exception).isInstanceOf(ConfigParseException.class);
         assertThat(exception.getMessage())
                 .contains("Missing")
                 .contains(badNode.toPrettyString());
@@ -45,7 +46,8 @@ public class TestLogSchemaParser {
         ObjectNode schemaNode = new ObjectMapper().createObjectNode();
         schemaNode.put("file-", "asdf");
         LogSchemaParser parser = new LogSchemaParser();
-        ConfigParseException exception = catchThrowableOfType(() -> parser.parse(schemaNode), ConfigParseException.class);
+        Exception exception = catchException(() -> parser.parse(schemaNode));
+        assertThat(exception).isInstanceOf(ConfigParseException.class);
         assertThat(exception.getMessage())
                 .contains("Missing")
                 .contains(schemaNode.toPrettyString());
