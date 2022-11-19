@@ -6,8 +6,6 @@ import logalytics.model.Entry;
 import logalytics.model.parsing.LogParser;
 import reactor.core.publisher.Flux;
 
-import java.io.*;
-
 public class LogSchema {
     public static final String TIMESTAMP = "TIMESTAMP";
     public static final String MESSAGE = "MESSAGE";
