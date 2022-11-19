@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import reactor.test.StepVerifier;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.StringReader;
 import java.util.function.Predicate;
 
@@ -38,19 +37,4 @@ public class TestLogReader {
                 .expectNext(String.join(NEWLINE, logA, logB), logC)
                 .verifyComplete();
     }
-//
-//    @Test
-//    public void testParseEntry() throws IOException {
-//        String timestampString = "ts";
-//        String messageString = "msg";
-//        String logLine = String.format("%s/%s", timestampString, messageString);
-//        BufferedReader bufferedReader = mock(BufferedReader.class);
-//        when(bufferedReader.readLine()).thenReturn(logLine);
-//        LogParser parser = new RegexParser(Pattern.compile("(.*)/(.*)"), Lists.newArrayList(TIMESTAMP, MESSAGE));
-//        LogReader logReader = new LogReader(bufferedReader, parser);
-//        Entry entry = logReader.readEntry();
-//        assertThat(entry.raw()).isEqualTo(logLine);
-//        assertThat(entry.get(TIMESTAMP)).isEqualTo(timestampString);
-//        assertThat(entry.get(MESSAGE)).isEqualTo(messageString);
-//    }
 }
