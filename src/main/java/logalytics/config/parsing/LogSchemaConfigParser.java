@@ -2,7 +2,7 @@ package logalytics.config.parsing;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import logalytics.config.LogSchemaBuilder;
-import logalytics.parsing.LogSchema;
+import logalytics.model.schema.LogSchema;
 
 import java.util.ArrayList;
 import java.util.List;

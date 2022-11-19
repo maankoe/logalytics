@@ -1,4 +1,4 @@
-package logalytics.parsing;
+package logalytics.model.parsing;
 
 import logalytics.model.Entry;
 

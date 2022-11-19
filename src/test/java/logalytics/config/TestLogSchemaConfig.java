@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import logalytics.config.parsing.ConfigParseException;
 import logalytics.config.parsing.LogSchemaConfigParser;
-import logalytics.parsing.LogSchema;
+import logalytics.model.schema.LogSchema;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
@@ -15,7 +15,7 @@ import static logalytics.config.parsing.LogSchemaConfigParser.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class TestLogSchemaBuilderParser {
+public class TestLogSchemaConfig {
     @Test
     public void testLogSchemaParse() throws ConfigParseException {
         String theFilePath = "the-file-path.log";
@@ -29,10 +29,11 @@ public class TestLogSchemaBuilderParser {
         LogSchemaBuilder schemaBuilder = spy(new LogSchemaBuilder());
         try (MockedStatic<LogSchema> utilities = mockStatic(LogSchema.class)) {
             utilities.when(LogSchema::builder).thenReturn(schemaBuilder);
-            LogSchema schema = new LogSchemaConfigParser().parse(schemaNode).build();
+            LogSchemaBuilder builder = new LogSchemaConfigParser().parse(schemaNode);
             verify(schemaBuilder).withFilePath(theFilePath);
             verify(schemaBuilder).withRegex(theRegex);
             verify(schemaBuilder).withGroups(Lists.newArrayList(groupA, groupB));
+            assertThat(schemaBuilder).isSameAs(builder);
         }
     }
 

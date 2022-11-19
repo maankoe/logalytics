@@ -1,7 +1,7 @@
 package logalytics.engine;
 
 import logalytics.model.Entry;
-import logalytics.parsing.LogParser;
+import logalytics.model.parsing.LogParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;

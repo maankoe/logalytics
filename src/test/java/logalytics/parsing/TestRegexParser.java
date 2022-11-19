@@ -1,11 +1,15 @@
 package logalytics.parsing;
 
 import logalytics.model.Entry;
+import logalytics.model.parsing.LogParser;
+import logalytics.model.parsing.RegexParser;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 
-import static logalytics.parsing.LogSchema.MESSAGE;
-import static logalytics.parsing.LogSchema.TIMESTAMP;
+import java.util.regex.Pattern;
+
+import static logalytics.model.schema.LogSchema.MESSAGE;
+import static logalytics.model.schema.LogSchema.TIMESTAMP;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TestRegexParser {
@@ -14,10 +18,7 @@ public class TestRegexParser {
         String timestampString = "ts";
         String messageString = "msg";
         String logLine = String.format("%s/%s", timestampString, messageString);
-        RegexSchema schema = new RegexSchema(
-                "(.*)/(.*)", Lists.newArrayList(TIMESTAMP, MESSAGE)
-        );
-        LogParser parser = new RegexParser(schema);
+        LogParser parser = new RegexParser(Pattern.compile("(.*)/(.*)"), Lists.newArrayList(TIMESTAMP, MESSAGE));
         Entry entry = parser.parse(logLine);
         assertThat(entry.raw()).isEqualTo(logLine);
         assertThat(entry.get(TIMESTAMP)).isEqualTo(timestampString);

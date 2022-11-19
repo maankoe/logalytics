@@ -1,6 +1,7 @@
 package logalytics.config;
 
-import logalytics.parsing.LogSchema;
+import logalytics.model.parsing.RegexParser;
+import logalytics.model.schema.LogSchema;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -26,6 +27,6 @@ public class LogSchemaBuilder {
     }
 
     public LogSchema build() {
-        return new LogSchema(filePath, Pattern.compile(regex), groups);
+        return new LogSchema(filePath, new RegexParser(Pattern.compile(regex), groups));
     }
 }

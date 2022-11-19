@@ -15,7 +15,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class TestLogWatcherConfigLoader {
+public class TestLogWatcherConfig {
     @Test
     public void testLoadWatcherConfigFromString() throws ConfigParseException {
         LogSchemaConfigParser schemaParser = mock(LogSchemaConfigParser.class);

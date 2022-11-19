@@ -3,7 +3,6 @@ package logalytics.config;
 import logalytics.config.parsing.ConfigParseException;
 import logalytics.config.parsing.LogSchemaConfigParser;
 import logalytics.config.parsing.LogWatcherConfigLoader;
-import logalytics.parsing.LogSchema;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
