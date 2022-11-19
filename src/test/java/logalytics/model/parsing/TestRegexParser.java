@@ -1,8 +1,6 @@
-package logalytics.parsing;
+package logalytics.model.parsing;
 
 import logalytics.model.Entry;
-import logalytics.model.parsing.LogParser;
-import logalytics.model.parsing.RegexParser;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 

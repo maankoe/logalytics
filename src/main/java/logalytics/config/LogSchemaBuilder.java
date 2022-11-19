@@ -1,8 +1,12 @@
 package logalytics.config;
 
+import logalytics.engine.LogReader;
 import logalytics.model.parsing.RegexParser;
 import logalytics.model.schema.LogSchema;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -26,7 +30,7 @@ public class LogSchemaBuilder {
         return this;
     }
 
-    public LogSchema build() {
-        return new LogSchema(filePath, new RegexParser(Pattern.compile(regex), groups));
+    public LogSchema build() throws FileNotFoundException {
+        return new LogSchema(new LogReader(new BufferedReader(new FileReader(filePath))), new RegexParser(Pattern.compile(regex), groups));
     }
 }

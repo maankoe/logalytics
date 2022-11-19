@@ -14,11 +14,11 @@ repositories {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.0")
-    testImplementation("org.assertj:assertj-core:3.23.1")
-    testImplementation("org.mockito:mockito-inline:4.8.1")
-//    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//    testImplementation 'io.projectreactor:reactor-test'
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude(group = "org.mockito", module = "mockito-core")
+    }
+    testImplementation("org.mockito:mockito-inline")
+    testImplementation("io.projectreactor:reactor-test")
 }
 
 tasks.getByName<Test>("test") {

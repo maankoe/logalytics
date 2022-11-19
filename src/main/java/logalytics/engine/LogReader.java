@@ -1,21 +1,25 @@
 package logalytics.engine;
 
-import logalytics.model.Entry;
-import logalytics.model.parsing.LogParser;
+import reactor.core.publisher.Flux;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.Reader;
+import java.nio.Buffer;
+import java.util.stream.BaseStream;
 
 public class LogReader {
     private final BufferedReader reader;
-    private final LogParser parser;
 
-    public LogReader(BufferedReader reader, LogParser parser) {
+    public LogReader(BufferedReader reader) {
         this.reader = reader;
-        this.parser = parser;
     }
 
-    public Entry readEntry() throws IOException {
-        return parser.parse(this.reader.readLine());
+    public Flux<String> producer() {
+        return Flux.using(
+                this.reader::lines,
+                Flux::fromStream,
+                BaseStream::close
+        );
     }
 }
