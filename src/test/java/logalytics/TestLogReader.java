@@ -7,17 +7,16 @@ import reactor.test.StepVerifier;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import java.util.function.Predicate;
 
 
 public class TestLogReader {
+    private static final String NEWLINE = System.lineSeparator();
     @Test
-    public void testReadNewlineDelimitedEntry() throws IOException {
+    public void testReadNewlineDelimitedEntry() {
         String logA = "A";
         String logB = "B";
-        String logContents = String.join("\n", logA, logB);
+        String logContents = String.join(NEWLINE, logA, logB);
         BufferedReader bufferedReader = new BufferedReader(new StringReader(logContents));
         LogReader logReader = new LogReader(bufferedReader);
         StepVerifier.create(logReader.producer())
@@ -26,16 +25,17 @@ public class TestLogReader {
     }
 
     @Test
-    public void testReadCommaDelimitedEntry() throws IOException {
+    public void testReadCommaDelimitedEntry() {
+        String delimiter = ",";
+        Predicate<String> newEntryPredicate = x -> x.startsWith(delimiter);
         String logA = "A";
         String logB = "B";
-        String logC = "C";
-        String delimiter = ",";
-        String logContents = String.join("\n", logA, logB, delimiter+logC);
+        String logC = delimiter + "C";
+        String logContents = String.join(NEWLINE, logA, logB, logC);
         BufferedReader bufferedReader = new BufferedReader(new StringReader(logContents));
-        LogReader logReader = new LogReader(bufferedReader, delimiter);
+        LogReader logReader = new LogReader(bufferedReader, newEntryPredicate);
         StepVerifier.create(logReader.producer())
-                .expectNext(String.join("\n", logA, logB), delimiter+logC)
+                .expectNext(String.join(NEWLINE, logA, logB), logC)
                 .verifyComplete();
     }
 //

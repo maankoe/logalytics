@@ -3,20 +3,23 @@ package logalytics.engine;
 import reactor.core.publisher.Flux;
 
 import java.io.BufferedReader;
+import java.util.function.Predicate;
 import java.util.stream.BaseStream;
 
 public class LogReader {
+
+    private static final String NEWLINE = System.lineSeparator();
     private final BufferedReader reader;
-    private final String delimiter;
+    private final Predicate<String> delimiterPredicate;
 
     public LogReader(BufferedReader reader) {
         this.reader = reader;
-        this.delimiter = null;
+        this.delimiterPredicate = x -> true;
     }
 
-    public LogReader(BufferedReader reader, String delimiter) {
+    public LogReader(BufferedReader reader, Predicate<String> delimiterPredicate) {
         this.reader = reader;
-        this.delimiter = delimiter;
+        this.delimiterPredicate = delimiterPredicate;
     }
 
     public Flux<String> producer() {
@@ -25,7 +28,7 @@ public class LogReader {
                         Flux::fromStream,
                         BaseStream::close
                 )
-                .windowUntil(x -> this.delimiter == null || x.startsWith(this.delimiter), true)
-                .flatMap(window -> window.reduce((x, y) -> String.join("\n", x, y)));
+                .windowUntil(this.delimiterPredicate, true)
+                .flatMap(window -> window.reduce((x, y) -> String.join(NEWLINE, x, y)));
     }
 }
