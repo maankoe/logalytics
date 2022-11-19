@@ -35,6 +35,6 @@ public class TestLogSchema {
         LogSchema schema = new LogSchema(reader, mock(LogParser.class));
         StepVerifier.create(schema.producer())
                 .expectNextSequence(lines)
-                .verifyComplete();;
+                .verifyComplete();
     }
 }

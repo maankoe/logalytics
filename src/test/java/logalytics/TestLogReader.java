@@ -1,21 +1,12 @@
 package logalytics;
 
 import logalytics.engine.LogReader;
-import logalytics.model.Entry;
-import logalytics.model.parsing.NoParser;
-import logalytics.model.parsing.LogParser;
-import logalytics.model.parsing.RegexParser;
-import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import reactor.test.StepVerifier;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.regex.Pattern;
 
-import static logalytics.model.schema.LogSchema.MESSAGE;
-import static logalytics.model.schema.LogSchema.TIMESTAMP;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 

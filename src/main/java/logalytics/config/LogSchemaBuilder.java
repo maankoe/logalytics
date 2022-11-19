@@ -31,6 +31,6 @@ public class LogSchemaBuilder {
     }
 
     public LogSchema build() throws FileNotFoundException {
-        return new LogSchema(new LogReader(new BufferedReader(new FileReader(filePath))), new RegexParser(Pattern.compile(regex), groups));
+            return new LogSchema(new LogReader(new BufferedReader(new FileReader(filePath))), new RegexParser(Pattern.compile(regex), groups));
     }
 }
