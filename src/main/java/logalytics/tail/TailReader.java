@@ -43,15 +43,11 @@ public class TailReader {
         }
     }
 
-    private void read(RABReader reader) {
-        try {
-            int x = reader.read();
-            while (x >= 0) {
-                this.handler.handle((char) x);
-                x = reader.read();
-            }
-        } catch (IOException e) {
-            this.handler.exception(e);
+    private void read(RABReader reader) throws IOException {
+        int x = reader.read();
+        while (x >= 0) {
+            this.handler.handle((char) x);
+            x = reader.read();
         }
     }
 }
