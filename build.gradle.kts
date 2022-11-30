@@ -5,11 +5,14 @@ plugins {
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
 }
 
-group = "logalytics"
+group = "maankoe"
 version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    maven {
+        url = uri("https://maven.pkg.github.com/maankoe/patiently")
+    }
 }
 
 dependencies {
@@ -19,6 +22,7 @@ dependencies {
     }
     testImplementation("org.mockito:mockito-inline")
     testImplementation("io.projectreactor:reactor-test")
+    testImplementation("patiently:patiently:0.1")
 }
 
 tasks.getByName<Test>("test") {
@@ -26,5 +30,5 @@ tasks.getByName<Test>("test") {
 }
 
 application {
-    mainClass.set("logalytics.Application")
+    mainClass.set("timbertally.Application")
 }

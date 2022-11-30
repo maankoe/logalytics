@@ -1,0 +1,25 @@
+package timbertally.model.parsing;
+
+import timbertally.model.Entry;
+import org.assertj.core.util.Lists;
+import org.junit.jupiter.api.Test;
+
+import java.util.regex.Pattern;
+
+import static timbertally.model.schema.LogSchema.MESSAGE;
+import static timbertally.model.schema.LogSchema.TIMESTAMP;
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class TestRegexParser {
+    @Test
+    public void testParser() {
+        String timestampString = "ts";
+        String messageString = "msg";
+        String logLine = String.format("%s/%s", timestampString, messageString);
+        LogParser parser = new RegexParser(Pattern.compile("(.*)/(.*)"), Lists.newArrayList(TIMESTAMP, MESSAGE));
+        Entry entry = parser.parse(logLine);
+        assertThat(entry.raw()).isEqualTo(logLine);
+        assertThat(entry.get(TIMESTAMP)).isEqualTo(timestampString);
+        assertThat(entry.get(MESSAGE)).isEqualTo(messageString);
+    }
+}

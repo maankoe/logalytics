@@ -1,2 +1,2 @@
-rootProject.name = "logalytics"
+rootProject.name = "timbertally"
 
