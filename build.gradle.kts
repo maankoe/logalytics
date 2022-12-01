@@ -12,6 +12,10 @@ repositories {
     mavenCentral()
     maven {
         url = uri("https://maven.pkg.github.com/maankoe/patiently")
+        credentials {
+            username = "maankoe"
+            password = System.getenv("GITHUB_PACKAGE_READ_TOKEN")
+        }
     }
 }
 
@@ -22,7 +26,7 @@ dependencies {
     }
     testImplementation("org.mockito:mockito-inline")
     testImplementation("io.projectreactor:reactor-test")
-    testImplementation("patiently:patiently:0.1")
+    testImplementation("maankoe:patiently:0.1")
 }
 
 tasks.getByName<Test>("test") {

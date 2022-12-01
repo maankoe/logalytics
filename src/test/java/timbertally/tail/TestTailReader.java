@@ -1,6 +1,7 @@
 package timbertally.tail;
 
-import timbertally.tail.utils.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import patiently.Patiently;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -9,6 +10,7 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -23,7 +25,7 @@ public class TestTailReader {
             this.characters().add(x);
         }
 
-        public synchronized List<Character> characters() {
+            public synchronized List<Character> characters() {
             return this.characters;
         }
 
@@ -33,96 +35,105 @@ public class TestTailReader {
         }
     }
 
-    private final int readerWaitMs = 10;
-    private final Path testPath = Path.of("/tmp/test");;
+    private final int retryIntervalMs = 25;
+    private final int retryMaxMs = 500;
+    private final Path testPath = Path.of("/tmp/test");
+
+    private List<Character> toCharList(String string) {
+        return string.chars().mapToObj(x -> (char) x).collect(Collectors.toList());
+    }
+
+    @BeforeEach
+    public void setUp() throws IOException {
+        rmFile();
+    }
 
     @Test
     public void testReadStatic() throws Exception {
-        writeToFile("abc");
+        String fileContents = "abc";
+        writeToFile(fileContents);
         CharCollector handler = new CharCollector();
-        TailReader reader = new TailReader(this.testPath, handler, readerWaitMs);
+        TailReader reader = new TailReader(this.testPath, handler, retryMaxMs);
         reader.start();
-        Assertions.delay(() -> assertThat(handler.characters())
-                .containsExactlyInAnyOrder('a', 'b', 'c')
-        ).test();
+        Patiently.retry(() ->
+                assertThat(handler.characters())
+                        .containsExactlyElementsOf(toCharList(fileContents))
+        ).every(retryIntervalMs).until(retryMaxMs);
         reader.stop();
     }
 
     @Test
     public void testReadAppended() throws Exception {
-        writeToFile("abc");
-        CharCollector handler = new CharCollector();
-        TailReader reader = new TailReader(this.testPath, handler, readerWaitMs);
-        reader.start();
-        Assertions.delay(() -> assertThat(handler.characters())
-                .containsExactlyInAnyOrder('a', 'b', 'c')
-        ).test();
-        appendToFile("def");
-        Assertions.delay(() -> assertThat(handler.characters())
-                .containsExactlyInAnyOrder('a', 'b', 'c', 'd', 'e', 'f')
-        ).test();
-        reader.stop();
+        testTailReaderWithUpdate("abc", "def");
     }
 
     @Test
     public void testReadFromEmpty() throws Exception {
-        writeToFile("");
-        CharCollector handler = new CharCollector();
-        TailReader reader = new TailReader(this.testPath, handler, readerWaitMs);
-        reader.start();
-        appendToFile("abc");
-        Assertions.delay(() -> assertThat(handler.characters())
-                .containsExactlyInAnyOrder('a', 'b', 'c')
-        ).test();
-        reader.stop();
+        testTailReaderWithUpdate("", "abc");
     }
 
     @Test
     public void testPathRotationSmaller() throws Exception {
-        writeToFile("abc");
-        CharCollector handler = new CharCollector();
-        TailReader reader = new TailReader(this.testPath, handler, readerWaitMs);
-        reader.start();
-        Assertions.delay(() -> assertThat(handler.characters())
-                .containsExactlyInAnyOrder('a', 'b', 'c')
-        );
-        writeToFile("de");
-        Assertions.delay(() -> assertThat(handler.characters())
-                .containsExactlyInAnyOrder('a', 'b', 'c', 'd', 'e')
-        );
-        reader.stop();
+        testTailReaderWithOverwrite("abc", "de");
     }
 
     @Test
     public void testPathRotationSameSize() throws Exception {
-        writeToFile("abc");
-        CharCollector handler = new CharCollector();
-        TailReader reader = new TailReader(this.testPath, handler, readerWaitMs);
-        reader.start();
-        Assertions.delay(() -> assertThat(handler.characters())
-                .containsExactlyInAnyOrder('a', 'b', 'c')
-        ).test();
-        writeToFile("def");
-        Assertions.delay(() -> assertThat(handler.characters())
-                .containsExactlyInAnyOrder('a', 'b', 'c', 'd', 'e', 'f')
-        ).test();
-        reader.stop();
+        testTailReaderWithOverwrite("abc", "def");
     }
 
     @Test
     public void testFileGetsRemoved() throws Exception {
         writeToFile("abc");
         TailHandler handler = mock(TailHandler.class);
-        TailReader reader = new TailReader(this.testPath, handler, readerWaitMs);
+        TailReader reader = new TailReader(this.testPath, handler, retryMaxMs);
         reader.start();
         rmFile();
-        Assertions.delay(() -> verify(handler, times(1))
-                .exception(any(NoSuchFileException.class))
-        ).test();
+        Patiently.retry(() ->
+                verify(handler, times(1))
+                        .exception(any(NoSuchFileException.class))
+        ).every(retryIntervalMs).until(retryMaxMs);
+    }
+
+    private void testTailReaderWithUpdate(
+            String startFileContents, String updateFileContents
+    ) throws Exception {
+        testTailRreader(startFileContents, updateFileContents, false);
+    }
+
+    private void testTailReaderWithOverwrite(
+            String startFileContents, String updateFileContents
+    ) throws Exception {
+        testTailRreader(startFileContents, updateFileContents, true);
+    }
+
+    private void testTailRreader(
+            String startFileContents, String updateFileContents, boolean overwrite
+    ) throws IOException {
+        writeToFile(startFileContents);
+        CharCollector handler = new CharCollector();
+        TailReader reader = new TailReader(this.testPath, handler, retryMaxMs);
+        reader.start();
+        Patiently.retry(() ->
+                assertThat(handler.characters())
+                        .containsExactlyElementsOf(toCharList(startFileContents))
+        ).every(retryIntervalMs).until(retryMaxMs);
+        if (overwrite) {
+            writeToFile(updateFileContents);
+        } else {
+            appendToFile(updateFileContents);
+        }
+        Patiently.retry(() ->
+                assertThat(handler.characters())
+                        .containsExactlyElementsOf(
+                                toCharList(startFileContents + updateFileContents)
+                        )
+        ).every(retryIntervalMs).until(retryMaxMs);
+        reader.stop();
     }
 
     private void rmFile() throws IOException {
-        Files.delete(this.testPath);
+        Files.deleteIfExists(this.testPath);
     }
 
     private void writeToFile(String text) throws IOException {
