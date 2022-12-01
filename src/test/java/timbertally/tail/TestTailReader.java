@@ -35,8 +35,9 @@ public class TestTailReader {
         }
     }
 
-    private final int retryIntervalMs = 25;
-    private final int retryMaxMs = 500;
+    private final int testRetryIntervalMs = 5;
+    private final int testRetryMaxMs = 100;
+    private final int tailReaderPollInterval = 10;
     private final Path testPath = Path.of("/tmp/test");
 
     private List<Character> toCharList(String string) {
@@ -53,12 +54,12 @@ public class TestTailReader {
         String fileContents = "abc";
         writeToFile(fileContents);
         CharCollector handler = new CharCollector();
-        TailReader reader = new TailReader(this.testPath, handler, retryMaxMs);
+        TailReader reader = new TailReader(this.testPath, handler, tailReaderPollInterval);
         reader.start();
         Patiently.retry(() ->
                 assertThat(handler.characters())
                         .containsExactlyElementsOf(toCharList(fileContents))
-        ).every(retryIntervalMs).until(retryMaxMs);
+        ).every(testRetryIntervalMs).until(testRetryMaxMs);
         reader.stop();
     }
 
@@ -86,13 +87,13 @@ public class TestTailReader {
     public void testFileGetsRemoved() throws Exception {
         writeToFile("abc");
         TailHandler handler = mock(TailHandler.class);
-        TailReader reader = new TailReader(this.testPath, handler, retryMaxMs);
+        TailReader reader = new TailReader(this.testPath, handler, tailReaderPollInterval);
         reader.start();
         rmFile();
         Patiently.retry(() ->
                 verify(handler, times(1))
                         .exception(any(NoSuchFileException.class))
-        ).every(retryIntervalMs).until(retryMaxMs);
+        ).every(testRetryIntervalMs).until(testRetryMaxMs);
     }
 
     private void testTailReaderWithUpdate(
@@ -112,12 +113,12 @@ public class TestTailReader {
     ) throws IOException {
         writeToFile(startFileContents);
         CharCollector handler = new CharCollector();
-        TailReader reader = new TailReader(this.testPath, handler, retryMaxMs);
+        TailReader reader = new TailReader(this.testPath, handler, tailReaderPollInterval);
         reader.start();
         Patiently.retry(() ->
                 assertThat(handler.characters())
                         .containsExactlyElementsOf(toCharList(startFileContents))
-        ).every(retryIntervalMs).until(retryMaxMs);
+        ).every(testRetryIntervalMs).until(testRetryMaxMs);
         if (overwrite) {
             writeToFile(updateFileContents);
         } else {
@@ -128,7 +129,7 @@ public class TestTailReader {
                         .containsExactlyElementsOf(
                                 toCharList(startFileContents + updateFileContents)
                         )
-        ).every(retryIntervalMs).until(retryMaxMs);
+        ).every(testRetryIntervalMs).until(testRetryMaxMs);
         reader.stop();
     }
 
